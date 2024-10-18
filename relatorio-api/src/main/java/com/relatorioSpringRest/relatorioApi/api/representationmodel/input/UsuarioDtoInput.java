@@ -1,17 +1,18 @@
-package com.relatorioSpringRest.relatorioApi.domain.model;
+package com.relatorioSpringRest.relatorioApi.api.representationmodel.input;
 
 import com.relatorioSpringRest.relatorioApi.domain.model.Enum.TipoUsuario;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity
-public class Funcionario {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Getter
+@Setter
+public class UsuarioDtoInput {
 
     @Column
     @NotBlank
