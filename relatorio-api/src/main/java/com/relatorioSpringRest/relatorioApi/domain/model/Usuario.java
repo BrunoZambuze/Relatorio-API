@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -31,7 +33,9 @@ public class Usuario {
 
     @Column
     @Enumerated(EnumType.STRING)
-    @NotNull
     private TipoUsuario tipoUsuario;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Relatorio> relatorios;
 
 }

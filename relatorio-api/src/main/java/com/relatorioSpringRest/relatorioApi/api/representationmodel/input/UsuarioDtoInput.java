@@ -1,6 +1,7 @@
 package com.relatorioSpringRest.relatorioApi.api.representationmodel.input;
 
 import com.relatorioSpringRest.relatorioApi.domain.model.Enum.TipoUsuario;
+import com.relatorioSpringRest.relatorioApi.domain.model.Relatorio;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -9,6 +10,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
