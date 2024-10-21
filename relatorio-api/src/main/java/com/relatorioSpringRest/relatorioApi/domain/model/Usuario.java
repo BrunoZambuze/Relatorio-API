@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,6 +37,6 @@ public class Usuario {
     private TipoUsuario tipoUsuario;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<Relatorio> relatorios;
+    private List<Relatorio> relatorios = new ArrayList<>();
 
 }

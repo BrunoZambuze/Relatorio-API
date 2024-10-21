@@ -1,6 +1,5 @@
-package com.relatorioSpringRest.relatorioApi.domain.model.Enum;
+package com.relatorioSpringRest.relatorioApi.domain.model;
 
-import com.relatorioSpringRest.relatorioApi.domain.model.Relatorio;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

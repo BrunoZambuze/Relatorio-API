@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class GerenteService {
@@ -39,6 +41,14 @@ public class GerenteService {
                                 .orElseThrow(() -> new RecursoNaoEncontradoException("Gerente de id '" + gerenteId + "' não encontrado!"))
                                 .getTipoUsuario()
                                 .equals(TipoUsuario.GERENTE);
+    }
+
+    @Transactional
+    public List<Usuario> listarGerente(){
+        return usuarioRepository.findAll()
+                                .stream()
+                                .filter(user -> user.getTipoUsuario().equals(TipoUsuario.GERENTE))
+                                .toList();
     }
 
 }

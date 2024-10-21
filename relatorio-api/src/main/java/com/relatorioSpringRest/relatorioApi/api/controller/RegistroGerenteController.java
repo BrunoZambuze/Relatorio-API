@@ -13,6 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/usuarios/gerente")
 @AllArgsConstructor
@@ -24,9 +26,15 @@ public class RegistroGerenteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioDtoOutput adicionar(@Valid @RequestBody UsuarioDtoInput usuarioInput){
+    public UsuarioDtoOutput adicionarGerente(@Valid @RequestBody UsuarioDtoInput usuarioInput){
         Usuario novoUsuario = usuarioAssembler.toEntity(usuarioInput);
         return usuarioAssembler.toUsuarioOutput(gerenteService.inserirGerente(novoUsuario));
+    }
+
+    @GetMapping
+    public List<UsuarioDtoOutput> listarGerente(){
+        List<Usuario> listaUsuarios = gerenteService.listarGerente();
+        return usuarioAssembler.toCollectionOutput(listaUsuarios);
     }
 
     @PostMapping("/{gerenteId}/funcionarios")
