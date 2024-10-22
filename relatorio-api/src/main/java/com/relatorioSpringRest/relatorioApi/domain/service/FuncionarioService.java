@@ -57,8 +57,14 @@ public class FuncionarioService {
             throw new RegraDeNegocioException("Usuário encontrado pelo id " + funcionarioId + " não é um funcionário!");
         }
         Relatorio relatorio = relatorioService.relatorioExiste(relatorioId);
+        Usuario funcionario = usuarioRepository.findById(funcionarioId).get();
+        boolean relatorioIgualDoFuncinario = funcionario.getRelatorios()
+                                                        .stream()
+                                                        .anyMatch(rel -> rel.equals(relatorio));
+        if(!relatorioIgualDoFuncinario){
+            throw new RegraDeNegocioException("Funcionário não possui o relatório com id " + relatorioId + " especificado. Favor corrigir");
+        }
         Topico topicoNovo = topicoService.adicionarTopico(relatorio, topico);
-        relatorio.getTopicos().add(topicoNovo);
         return topicoNovo;
     }
 

@@ -40,4 +40,15 @@ public class Relatorio {
     @OneToMany(mappedBy = "relatorio", cascade = CascadeType.ALL)
     private List<Topico> topicos = new ArrayList<>();
 
+    public Topico adicionarTopico(Topico topico){
+        //Sempre que adicionarmos um novo tópico, o relatório muda o status para NÃO VISUALIZADO
+        if(this.getStatus().equals(StatusRelatorio.VISUALIZADO)){
+            this.setStatus(StatusRelatorio.NAO_VISUALIZADO);
+        }
+        topico.setData(OffsetDateTime.now());
+        topico.setRelatorio(this);
+        this.getTopicos().add(topico);
+        return topico;
+    }
+
 }

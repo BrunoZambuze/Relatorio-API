@@ -3,6 +3,7 @@ package com.relatorioSpringRest.relatorioApi.domain.service;
 import com.relatorioSpringRest.relatorioApi.domain.exception.RecursoNaoEncontradoException;
 import com.relatorioSpringRest.relatorioApi.domain.exception.RegraDeNegocioException;
 import com.relatorioSpringRest.relatorioApi.domain.model.Enum.TipoUsuario;
+import com.relatorioSpringRest.relatorioApi.domain.model.Relatorio;
 import com.relatorioSpringRest.relatorioApi.domain.model.Usuario;
 import com.relatorioSpringRest.relatorioApi.domain.repository.UsuarioRepository;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,8 @@ import java.util.List;
 public class GerenteService {
 
     private final UsuarioRepository usuarioRepository;
+    private final FuncionarioService funcionarioService;
+    private final RelatorioService relatorioService;
 
     @Transactional
     public Usuario inserirGerente(Usuario usuario) throws RegraDeNegocioException{
@@ -49,6 +52,16 @@ public class GerenteService {
                                 .stream()
                                 .filter(user -> user.getTipoUsuario().equals(TipoUsuario.GERENTE))
                                 .toList();
+    }
+
+    @Transactional
+    public List<Usuario> listarTodosRelatoriosDosFuncionarios(){
+        return funcionarioService.listarFuncionarios();
+    }
+
+    @Transactional
+    public Relatorio listarTodosOsTopicosDoRelatorio(Long relatorioId){
+        return relatorioService.relatorioExiste(relatorioId);
     }
 
 }

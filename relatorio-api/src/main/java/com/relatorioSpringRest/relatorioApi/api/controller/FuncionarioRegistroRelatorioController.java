@@ -8,11 +8,9 @@ import com.relatorioSpringRest.relatorioApi.api.representationmodel.input.Topico
 import com.relatorioSpringRest.relatorioApi.api.representationmodel.output.RelatorioDtoOutput;
 import com.relatorioSpringRest.relatorioApi.api.representationmodel.output.TopicoDtoOutput;
 import com.relatorioSpringRest.relatorioApi.api.representationmodel.output.UsuarioDtoOutput;
-import com.relatorioSpringRest.relatorioApi.domain.model.Enum.TipoUsuario;
 import com.relatorioSpringRest.relatorioApi.domain.model.Relatorio;
 import com.relatorioSpringRest.relatorioApi.domain.model.Topico;
 import com.relatorioSpringRest.relatorioApi.domain.model.Usuario;
-import com.relatorioSpringRest.relatorioApi.domain.repository.UsuarioRepository;
 import com.relatorioSpringRest.relatorioApi.domain.service.FuncionarioService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

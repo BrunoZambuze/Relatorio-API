@@ -19,13 +19,8 @@ public class TopicoService {
     @Transactional
     public Topico adicionarTopico(Relatorio relatorio,
                                      Topico topico){
-        //Sempre que adicionarmos um novo tópico, o relatório muda o status para NÃO VISUALIZADO
-        if(relatorio.getStatus().equals(StatusRelatorio.VISUALIZADO)){
-            relatorio.setStatus(StatusRelatorio.NAO_VISUALIZADO);
-        }
-        topico.setData(OffsetDateTime.now());
-        topico.setRelatorio(relatorio);
-        return topicoRepository.save(topico);
+        Topico novoTopico = relatorio.adicionarTopico(topico);
+        return topicoRepository.save(novoTopico);
     }
 
 }
