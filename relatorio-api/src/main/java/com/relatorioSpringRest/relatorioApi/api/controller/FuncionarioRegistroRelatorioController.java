@@ -15,6 +15,7 @@ import com.relatorioSpringRest.relatorioApi.domain.service.FuncionarioService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,12 +52,23 @@ public class FuncionarioRegistroRelatorioController {
     }
 
     @PostMapping("/{funcionarioId}/relatorios/{relatorioId}")
-    public TopicoDtoOutput inserirTopico(@PathVariable Long funcionarioId,
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<TopicoDtoOutput> inserirTopico(@PathVariable Long funcionarioId,
                                          @PathVariable Long relatorioId,
                                          @RequestBody @Valid TopicoDtoInput topicoInput){
         Topico topico = topicoAssembler.toEntity(topicoInput);
         Topico novoTopico = funcionarioService.adicionarTopico(funcionarioId, relatorioId, topico);
-        return topicoAssembler.toTopicoOutput(novoTopico);
+        return ResponseEntity.ok(topicoAssembler.toTopicoOutput(novoTopico));
+    }
+
+    @PutMapping("/{funcionarioId}/relatorios/{relatorioId}/topicos/{topicoId}")
+    public TopicoDtoOutput atualizarTopicoDoRelatorio(@PathVariable Long funcionarioId,
+                                                         @PathVariable Long relatorioId,
+                                                         @PathVariable Long topicoId,
+                                                         @RequestBody @Valid TopicoDtoInput topicoInput){
+        Topico topico = topicoAssembler.toEntity(topicoInput);
+        Topico topicoAtualizado = funcionarioService.atualizarTopicoDoRelatorio(funcionarioId, relatorioId, topicoId, topico);
+        return topicoAssembler.toTopicoOutput(topicoAtualizado);
     }
 
 }

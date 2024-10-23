@@ -31,9 +31,7 @@ public class FuncionarioService {
 
     @Transactional
     public Relatorio adicionarRelatorio(Long funcionarioId, Relatorio relatorio){
-        if(!isFuncinario(funcionarioId)){
-            throw new RegraDeNegocioException("Usuário encontrado pelo id " + funcionarioId + " não é um funcionário!");
-        }
+        funcionarioNaoEncontrado(funcionarioId);
         Usuario funcioario = usuarioRepository.findById(funcionarioId).get();
         Relatorio relatorioNovo = relatorioService.adicionarRelatorio(funcioario, relatorio);
         funcioario.getRelatorios().add(relatorioNovo);
@@ -42,9 +40,7 @@ public class FuncionarioService {
 
     @Transactional
     public List<Relatorio> listarRelatorios(Long funcionarioId){
-        if(!isFuncinario(funcionarioId)){
-            throw new RegraDeNegocioException("Usuário encontrado pelo id " + funcionarioId + " não é um funcionário!");
-        }
+        funcionarioNaoEncontrado(funcionarioId);
         Usuario funcionario = usuarioRepository.findById(funcionarioId).get();
         return funcionario.getRelatorios();
     }
@@ -53,19 +49,22 @@ public class FuncionarioService {
     public Topico adicionarTopico(Long funcionarioId,
                                   Long relatorioId,
                                   Topico topico){
-        if(!isFuncinario(funcionarioId)){
-            throw new RegraDeNegocioException("Usuário encontrado pelo id " + funcionarioId + " não é um funcionário!");
-        }
+        funcionarioNaoEncontrado(funcionarioId);
         Relatorio relatorio = relatorioService.relatorioExiste(relatorioId);
-        Usuario funcionario = usuarioRepository.findById(funcionarioId).get();
-        boolean relatorioIgualDoFuncinario = funcionario.getRelatorios()
-                                                        .stream()
-                                                        .anyMatch(rel -> rel.equals(relatorio));
-        if(!relatorioIgualDoFuncinario){
-            throw new RegraDeNegocioException("Funcionário não possui o relatório com id " + relatorioId + " especificado. Favor corrigir");
-        }
+        funcionarioNaoPossuiRelatorioComEsseId(funcionarioId, relatorioId);
         Topico topicoNovo = topicoService.adicionarTopico(relatorio, topico);
         return topicoNovo;
+    }
+
+    @Transactional
+    public Topico atualizarTopicoDoRelatorio(Long funcionarioId,
+                                                Long relatorioId,
+                                                Long topicoId,
+                                                Topico topico){
+        funcionarioNaoEncontrado(funcionarioId);
+        funcionarioNaoPossuiRelatorioComEsseId(funcionarioId, relatorioId);
+        Relatorio relatorioEncontrado = relatorioService.relatorioExiste(relatorioId);
+        return topicoService.atualizarTopico(topicoId, topico, relatorioEncontrado);
     }
 
     private boolean isFuncinario(Long funcionarioId){
@@ -73,6 +72,26 @@ public class FuncionarioService {
                                 .orElseThrow(() -> new RecursoNaoEncontradoException("Funcionário com id " + funcionarioId + " não encontrado!"))
                                 .getTipoUsuario()
                                 .equals(TipoUsuario.FUNCIONARIO);
+    }
+
+    private void funcionarioNaoEncontrado(Long funcionarioId){
+        if(!isFuncinario(funcionarioId)){
+            throw new RegraDeNegocioException("Usuário encontrado pelo id " + funcionarioId + " não é um funcionário!");
+        }
+    }
+
+    private boolean verificaSeFuncionarioTemRelatorioComEsseId(Long funcionarioId, Long relatorioId){
+        Usuario funcionario = usuarioRepository.findById(funcionarioId).get();
+        Relatorio relatorio = relatorioService.relatorioExiste(relatorioId);
+        return funcionario.getRelatorios()
+                .stream()
+                .anyMatch(rel -> rel.equals(relatorio));
+    }
+
+    private void funcionarioNaoPossuiRelatorioComEsseId(Long funcionarioId, Long relatorioId){
+        if(!verificaSeFuncionarioTemRelatorioComEsseId(funcionarioId, relatorioId)){
+            throw new RegraDeNegocioException("Funcionário não possui o relatório com id " + relatorioId + " especificado. Favor corrigir");
+        }
     }
 
 }

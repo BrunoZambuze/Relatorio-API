@@ -61,7 +61,9 @@ public class GerenteService {
 
     @Transactional
     public Relatorio listarTodosOsTopicosDoRelatorio(Long relatorioId){
-        return relatorioService.relatorioExiste(relatorioId);
+        Relatorio relatorio = relatorioService.relatorioExiste(relatorioId);
+        relatorio.visualizarRelatorio();
+        return relatorio;
     }
 
 }

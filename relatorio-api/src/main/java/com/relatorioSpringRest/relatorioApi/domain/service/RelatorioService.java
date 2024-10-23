@@ -31,6 +31,4 @@ public class RelatorioService {
                                   .orElseThrow(() -> new RecursoNaoEncontradoException("Relatório de id " + relatorioId + " não encontrado!"));
     }
 
-
-
 }

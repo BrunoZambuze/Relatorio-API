@@ -51,4 +51,8 @@ public class Relatorio {
         return topico;
     }
 
+    public void visualizarRelatorio(){
+        this.setStatus(StatusRelatorio.VISUALIZADO);
+    }
+
 }

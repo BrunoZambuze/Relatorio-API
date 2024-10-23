@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,8 +61,9 @@ public class RegistroGerenteController {
     }
 
     @GetMapping("/relatorios/{relatorioId}")
-    public RelatorioDtoOutput listarTopicosRelatorio(@PathVariable Long relatorioId){
-        return relatorioAssembler.toRelatorioOutput(gerenteService.listarTodosOsTopicosDoRelatorio(relatorioId));
+    public ResponseEntity<RelatorioDtoOutput> listarTopicosRelatorio(@PathVariable Long relatorioId){
+        RelatorioDtoOutput relatorio = relatorioAssembler.toRelatorioOutput(gerenteService.listarTodosOsTopicosDoRelatorio(relatorioId));
+        return ResponseEntity.ok(relatorio);
     }
 
 }
