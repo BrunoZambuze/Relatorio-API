@@ -31,4 +31,22 @@ public class RelatorioService {
                                   .orElseThrow(() -> new RecursoNaoEncontradoException("Relatório de id " + relatorioId + " não encontrado!"));
     }
 
+    @Transactional
+    public Relatorio atualizarRelatorio(Long relatorioId, Relatorio relatorio, Usuario funcionario){
+        Relatorio relatorioEncontrado = relatorioExiste(relatorioId);
+        relatorio.setId(relatorioId);
+        relatorio.setData(relatorioEncontrado.getData());
+        relatorio.setStatus(relatorioEncontrado.getStatus());
+        relatorio.setTopicos(relatorioEncontrado.getTopicos());
+        relatorio.setUsuario(funcionario);
+        return relatorioRepository.save(relatorio);
+    }
+
+    @Transactional
+    public void removerRelatorio(Long relatorioId, Usuario funcionario){
+        Relatorio relatorioEncontrado = relatorioExiste(relatorioId);
+        funcionario.getRelatorios().remove(relatorioEncontrado);
+        relatorioRepository.delete(relatorioEncontrado);
+    }
+
 }

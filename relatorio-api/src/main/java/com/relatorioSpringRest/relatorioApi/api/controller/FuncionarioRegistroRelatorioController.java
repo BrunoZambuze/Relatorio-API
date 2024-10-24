@@ -1,11 +1,13 @@
 package com.relatorioSpringRest.relatorioApi.api.controller;
 
 import com.relatorioSpringRest.relatorioApi.api.assembler.RelatorioAssembler;
+import com.relatorioSpringRest.relatorioApi.api.assembler.RelatorioResumoAssembler;
 import com.relatorioSpringRest.relatorioApi.api.assembler.TopicoAssembler;
 import com.relatorioSpringRest.relatorioApi.api.assembler.UsuarioAssembler;
 import com.relatorioSpringRest.relatorioApi.api.representationmodel.input.RelatorioDtoInput;
 import com.relatorioSpringRest.relatorioApi.api.representationmodel.input.TopicoDtoInput;
 import com.relatorioSpringRest.relatorioApi.api.representationmodel.output.RelatorioDtoOutput;
+import com.relatorioSpringRest.relatorioApi.api.representationmodel.output.RelatorioResumoRepresentation;
 import com.relatorioSpringRest.relatorioApi.api.representationmodel.output.TopicoDtoOutput;
 import com.relatorioSpringRest.relatorioApi.api.representationmodel.output.UsuarioDtoOutput;
 import com.relatorioSpringRest.relatorioApi.domain.model.Relatorio;
@@ -29,6 +31,7 @@ public class FuncionarioRegistroRelatorioController {
     private final UsuarioAssembler usuarioAssembler;
     private final RelatorioAssembler relatorioAssembler;
     private final TopicoAssembler topicoAssembler;
+    private final RelatorioResumoAssembler relatorioResumoAssembler;
 
     @GetMapping
     public List<UsuarioDtoOutput> listarFuncionarios(){
@@ -62,13 +65,38 @@ public class FuncionarioRegistroRelatorioController {
     }
 
     @PutMapping("/{funcionarioId}/relatorios/{relatorioId}/topicos/{topicoId}")
-    public TopicoDtoOutput atualizarTopicoDoRelatorio(@PathVariable Long funcionarioId,
+    public ResponseEntity<TopicoDtoOutput> atualizarTopicoDoRelatorio(@PathVariable Long funcionarioId,
                                                          @PathVariable Long relatorioId,
                                                          @PathVariable Long topicoId,
                                                          @RequestBody @Valid TopicoDtoInput topicoInput){
         Topico topico = topicoAssembler.toEntity(topicoInput);
         Topico topicoAtualizado = funcionarioService.atualizarTopicoDoRelatorio(funcionarioId, relatorioId, topicoId, topico);
-        return topicoAssembler.toTopicoOutput(topicoAtualizado);
+        return ResponseEntity.ok(topicoAssembler.toTopicoOutput(topicoAtualizado));
+    }
+
+    @DeleteMapping("/{funcionarioId}/relatorios/{relatorioId}/topicos/{topicoId}")
+    public ResponseEntity<Void> removerTopico(@PathVariable Long funcionarioId,
+                                              @PathVariable Long relatorioId,
+                                              @PathVariable Long topicoId){
+        funcionarioService.removerTopicoDoRelatorio(funcionarioId, relatorioId, topicoId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("{funcionarioId}/relatorios/{relatorioId}")
+    public ResponseEntity<RelatorioResumoRepresentation> atualizarRelatorio(@PathVariable Long funcionarioId,
+                                                                            @PathVariable Long relatorioId,
+                                                                            @RequestBody @Valid RelatorioDtoInput relatorioInput){
+        Relatorio relatorio = relatorioAssembler.toEntity(relatorioInput);
+        Relatorio relatorioAtualizado = funcionarioService.atualizarRelatorio(funcionarioId, relatorioId, relatorio);
+        RelatorioResumoRepresentation relatorioOutput = relatorioResumoAssembler.toRelatorioResumoOutput(relatorioAtualizado);
+        return ResponseEntity.ok(relatorioOutput);
+    }
+
+    @DeleteMapping("{funcionarioId}/relatorios/{relatorioId}")
+    public ResponseEntity<Void> removerRelatorio(@PathVariable Long funcionarioId,
+                                                 @PathVariable Long relatorioId){
+        funcionarioService.removerRelatorio(funcionarioId, relatorioId);
+        return ResponseEntity.noContent().build();
     }
 
 }

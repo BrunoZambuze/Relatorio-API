@@ -67,6 +67,34 @@ public class FuncionarioService {
         return topicoService.atualizarTopico(topicoId, topico, relatorioEncontrado);
     }
 
+    @Transactional
+    public void removerTopicoDoRelatorio(Long funcionarioId,
+                                         Long relatorioId,
+                                         Long topicoId){
+        funcionarioNaoEncontrado(funcionarioId);
+        funcionarioNaoPossuiRelatorioComEsseId(funcionarioId, relatorioId);
+        Relatorio relatorioEncontrado = relatorioService.relatorioExiste(relatorioId);
+        topicoService.removerTopico(topicoId, relatorioEncontrado);
+    }
+
+    @Transactional
+    public Relatorio atualizarRelatorio(Long funcionarioId, Long relatorioId, Relatorio relatorio){
+        funcionarioNaoEncontrado(funcionarioId);
+        Usuario funcionarioEncontrado = usuarioRepository.findById(funcionarioId).get();
+        isFuncinario(funcionarioId);
+        funcionarioNaoPossuiRelatorioComEsseId(funcionarioId, relatorioId);
+        return relatorioService.atualizarRelatorio(relatorioId, relatorio, funcionarioEncontrado);
+    }
+
+    @Transactional
+    public void removerRelatorio(Long funcionarioId, Long relatorioId){
+        funcionarioNaoEncontrado(funcionarioId);
+        funcionarioNaoPossuiRelatorioComEsseId(funcionarioId, relatorioId);
+        Usuario funcionarioEncontrado = usuarioRepository.findById(funcionarioId).get();
+        isFuncinario(funcionarioId);
+        relatorioService.removerRelatorio(relatorioId, funcionarioEncontrado);
+    }
+
     private boolean isFuncinario(Long funcionarioId){
         return usuarioRepository.findById(funcionarioId)
                                 .orElseThrow(() -> new RecursoNaoEncontradoException("Funcionário com id " + funcionarioId + " não encontrado!"))
